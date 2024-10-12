@@ -6,9 +6,9 @@ const desiredPort = process.env.Port ?? 1234; // eligiendo el puerto
 const processRequest = (req, res) => {
   if (req.url === `/`) {
     res.statusCode = 200;
-    res.setHeader = (`Content-Text`, `text/html; charest:uft-8`);
+    res.setHeader = (`Content-Text`, `text/html; charset:utf-8`);
     console.log(req.url);
-    res.end(`hello`);
+    res.end(`hello world`);
   }
 };
 
