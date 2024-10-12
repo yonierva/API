@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "server",
+  "main": "http.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yonierva/api.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "yonier vasquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yonierva/api/issues"
+  },
+  "homepage": "https://github.com/yonierva/api#readme"
+}
