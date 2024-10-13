@@ -6,12 +6,13 @@ const processRequest = (req, res) => {
 
   switch (method) {
     // metodo GET para la peticion
-    case `GET`: {
+    case `GET`:{
       switch (url) {
-        case `/myself`:
+        case `/me`:
           res.setHeader = (`Content-Text`, `application/json; charset:utf-8`);
-          return (res.end = JSON.stringify(myselfJson));
+          return res.end = (JSON.stringify(myselfJson));
 
+          
         // en caso tal haya algun error
         default:
           res.statusCode = 404;
@@ -22,7 +23,27 @@ const processRequest = (req, res) => {
     // metodo POST para la creacion
     case `POST`: {
       switch (url) {
-        case `yourSelf`:
+        case `/your`: 
+        const body =`{
+          "name": "yonier",
+          "type": "vasquez"
+        }`
+        req.on(`data`, chunk =>{
+          body += chunk.toString()
+        })
+
+        req.on(`end`, () =>{
+          const data = JSON.parse(body)
+          res.writeHead(201,(`Content-Text`, `application/json; charset:utf-8`));
+          res.end(JSON.stringify(data))
+        })
+
+        break
+
+        default:
+          res.statusCode = 404;
+          res.setHeader = (`Content-Text`, `text/html; charset:utf-8`);
+          res.end(`<h1>404 no encontrado</h1>`);
       }
     }
   }
