@@ -4,9 +4,7 @@
   "description": "server",
   "main": "http.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:1": "node --watch crud.js",
-    "dev:2": "node --watch express.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
