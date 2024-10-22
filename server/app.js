@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const z = require("zod");
+const { valideCountry } = require("./schema");
+const { parcialCountry } = require("./schema");
 const countrys = require("../json/country.json");
 
 app.disable("x-powered-by");
@@ -9,6 +10,8 @@ app.use(express.json());
 
 // para filtrar movies
 app.get("/country", (req, res) => {
+  // esto arregla el problema de cors
+  res.header("Access-Control-Allow-Origen", "*");
   const { region } = req.query;
   if (region) {
     const filteredregion = countrys.filter((country) =>
@@ -26,21 +29,17 @@ app.get("/country/:id", (req, res) => {
   if (country) return res.json(country);
 });
 
+// agragar un pais
 app.post("/country", (req, res) => {
-  const countrySchema = z.object({
-    name: z.string(),
-    age: z.number().int(),
-    population: z.string(),
-    region: z.enum([
-      "norteamarica",
-      "suramerica",
-      "europa",
-      "africa",
-      "asia",
-      "oceania",
-    ]),
-  });
-  const { name, age, population, region } = req.body;
+  // pero para validar datos con el meto zod
+  const valide = valideCountry(req.body);
+
+  if (valide.error) {
+    res.status(404).json({ error: JSON.parse(valide.error.message) });
+  }
+
+  // se puede asi
+  // const { name, age, population, region } = req.body;
 
   //  sirve para buscar el elemento con la mayor id
   // const country = countrys.reduce((prev, current) => {
@@ -50,14 +49,32 @@ app.post("/country", (req, res) => {
   const nextid = countrys[countrys.length - 1].id;
   const newCountry = {
     id: nextid + 1,
-    name,
-    age,
-    population,
-    region,
+    ...valide.data,
   };
 
   countrys.push(newCountry);
   res.status(201).json(newCountry);
+});
+
+// actualizacion de un pais
+app.patch("/country/:id", (req, res) => {
+  const { id } = req.params;
+  const valide = parcialCountry(req.body);
+  const countryIndex = countrys.findIndex(
+    (country) => country.id === parseInt(id)
+  );
+  if (countryIndex === -1) {
+    res.status(404).json({ error: JSON.parse(valide.error.message) });
+  }
+
+  const upadteCountry = {
+    ...countrys[countryIndex],
+    ...valide.data,
+  };
+
+  countrys[countryIndex] = upadteCountry;
+
+  return res.json(upadteCountry);
 });
 
 // en caso que la peticion no se encuentre
