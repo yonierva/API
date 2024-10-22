@@ -1,12 +1,13 @@
-const express = require("express");
+import express, { json } from "express";
 const app = express();
-const { valideCountry } = require("./schema");
-const { parcialCountry } = require("./schema");
-const countrys = require("../json/country.json");
+import { valideCountry, parcialCountry } from "./schema.mjs";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const countrys = require("../../json/country.json");
 
 app.disable("x-powered-by");
 
-app.use(express.json());
+app.use(json());
 
 // para filtrar movies
 app.get("/country", (req, res) => {
@@ -27,6 +28,9 @@ app.get("/country/:id", (req, res) => {
   const { id } = req.params;
   const country = countrys.find((country) => country.id === parseInt(id));
   if (country) return res.json(country);
+  else {
+    res.status(404).json({ message: "no encontrado" });
+  }
 });
 
 // agragar un pais
@@ -75,6 +79,21 @@ app.patch("/country/:id", (req, res) => {
   countrys[countryIndex] = upadteCountry;
 
   return res.json(upadteCountry);
+});
+
+// para borrar un pais
+app.delete("/country/:id", (req, res) => {
+  const { id } = req.params;
+  const countryIndex = countrys.findIndex(
+    (country) => country.id === parseInt(id)
+  );
+  if (countryIndex === -1) {
+    res.status(404).json({ message: "pais no encontrado" });
+  } else {
+    countrys.splice(countryIndex, 1);
+
+    return res.json({ message: "country delate" });
+  }
 });
 
 // en caso que la peticion no se encuentre

@@ -1,5 +1,5 @@
 // const express = require("express");
-const myself = require("../json/myself.json");
+const myself = require("../../json/myself.json");
 const app = express();
 
 app.disable("x-powered-by");
