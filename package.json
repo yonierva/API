@@ -4,7 +4,8 @@
   "description": "server",
   "main": "http.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server/msj/app.mjs"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/yonierva/api#readme",
   "dependencies": {
     "express": "4.21.1",
+    "mongodb": "6.10.0",
     "zod": "3.23.8"
   }
 }

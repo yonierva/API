@@ -44,11 +44,6 @@ app.post("/country", (req, res) => {
   // se puede asi
   // const { name, age, population, region } = req.body;
 
-  //  sirve para buscar el elemento con la mayor id
-  // const country = countrys.reduce((prev, current) => {
-  //   return (prev.id > current.id) ? prev : current;
-  // }).id;
-
   const nextid = countrys[countrys.length - 1].id;
   const newCountry = {
     id: nextid + 1,

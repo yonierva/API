@@ -1,92 +1,85 @@
 [{
-    "id" : 1,
+    "_id" : 1,
     "name":"colombia",
     "age" : 200,
     "population" : "51 millones",
     "region":"suramerica"
 },
 {
-    "id": 2,
+    "_id": 2,
     "name" : "brasil",
-    "age" : "156",
+    "age" : 156,
     "population":"46 millones",
     "region":"suramerica"
 },
 {
-    "id": 3,
+    "_id": 3,
     "name" : "peru",
-    "age" : "300",
+    "age" : 300,
     "population":"20 millones",
     "region":"suramerica"
 },
 {
-    "id": 4,
+    "_id": 4,
     "name" : "ecuador",
-    "age" : "176",
+    "age" : 176,
     "population":"34 millones",
     "region":"sur america"
 },
 {
-    "id": 5,
+    "_id": 5,
     "name":"venezuela",
-    "age" : "250",
+    "age" : 250,
     "population":"40 millones",
     "region":"suramerica"
 },
 {
-    "id": 6,
+    "_id": 6,
     "name" : "chile",
-    "age" : "124",
+    "age" : 124,
     "population":"19 millones",
     "region":"sur america"
 },
 {
-    "id": 7,
+    "_id": 7,
     "name" : "argentina",
-    "age" : "130",
+    "age" : 130,
     "population":"40 millones",
     "region":"suramerica"
 },
 {
-    "id": 8,
+    "_id": 8,
     "name" : "bolivia",
-    "age" : "260",
+    "age" : 260,
     "population":"12 millones",
     "region":"sur america"
 },
 {
-    "id": 9,
+    "_id": 9,
     "name" : "uruguay",
-    "age" : "110",
+    "age" : 110,
     "population":"4 millones",
     "region":"suramerica"
 },
 {
-    "id": 10,
+    "_id": 10,
     "name" : "paraguuay",
-    "age" : "170",
+    "age" : 170,
     "population":"10 millones",
     "region":"suramerica"
 },
 {
-    "id": 11,
+    "_id": 11,
     "name" : "mexico",
-    "age" : "270",
+    "age" : 270,
     "population":"70 millones",
     "region":"norteamerica"
 },
 {
-    "id": 12,
+    "_id": 12,
     "name" : "USA",
-    "age" : "260",
+    "age" : 260,
     "population":"100 millones",
     "region":"norteamerica"
-},
-{
-    "id": 13,
-    "name": "españa",
-    "age": 400,
-    "population": "35 millones",
-    "region": "europa"
 }
 ]
