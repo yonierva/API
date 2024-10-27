@@ -1,35 +1,19 @@
 import express, { json } from "express";
 const app = express();
 import { valideCountry, parcialCountry } from "./schema.mjs";
-import { getMongodb } from "./mongo.mjs";
-import { date } from "zod";
-// import { createRequire } from "node:module";
-// const require = createRequire(import.meta.url);
-// const countrys = require("../../json/country.json");
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const countrys = require("../../json/country.json");
 
 app.disable("x-powered-by");
 
 app.use(json());
 
-// la conecion con mongodb y obetencion de la colletion
-const getCountrys = async () => {
-  try {
-    const database = await getMongodb();
-    const countrys = await database.collection("america").find().toArray();
-    // console.table(countrys);
-    // console.log(countrys);
-    return countrys;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 // para filtrar movies
-app.get("/country", async (req, res) => {
+app.get("/country", (req, res) => {
   // esto arregla el problema de cors
   res.header("Access-Control-Allow-Origen", "*");
   const { region } = req.query;
-  const countrys = await getCountrys();
   if (region) {
     const filteredregion = countrys.filter((country) =>
       country.region.toLowerCase().includes(region.toLowerCase())
@@ -40,9 +24,8 @@ app.get("/country", async (req, res) => {
 });
 
 //para buscar por id
-app.get("/country/:id", async (req, res) => {
+app.get("/country/:id", (req, res) => {
   const { id } = req.params;
-  const countrys = await getCountrys();
   const country = countrys.find((country) => country._id === parseInt(id));
   if (country) return res.json(country);
   else {
@@ -51,12 +34,9 @@ app.get("/country/:id", async (req, res) => {
 });
 
 // agragar un pais
-app.post("/country", async (req, res) => {
-  // pero para validar datos con el meto zod
+app.post("/country", (req, res) => {
+  // para validar datos con el meto zod
   const valide = valideCountry(req.body);
-  const database = await getMongodb();
-  const collection = database.collection("america");
-  const countrys = await collection.find().toArray();
 
   if (valide.error) {
     res.status(404).json({ error: JSON.parse(valide.error.message) });
@@ -65,64 +45,50 @@ app.post("/country", async (req, res) => {
   // se puede asi
   // const { name, age, population, region } = req.body;
 
-  const findid = countrys[countrys.length - 1]._id;
+  const findid = countrys.length > 0 ? countrys[countrys.length - 1]._id : null;
   const nextid = findid + 1;
   const newCountry = {
-    _id: parseInt(nextid),
+    _id: nextid,
     ...valide.data,
   };
 
-  await collection.insertOne(newCountry);
+  countrys.push(newCountry);
   res.status(201).json(newCountry);
 });
 
-// actualizacion de un pais
-app.patch("/country/:id", async (req, res) => {
+// para borrar un pais
+app.delete("/country/:id", (req, res) => {
   const { id } = req.params;
+  const countryIndex = countrys.findIndex(
+    (country) => country._id === parseInt(id)
+  );
+  if (countryIndex === -1) {
+    res.status(404).json({ message: "no encontrado" });
+  } else {
+    countrys.splice(countryIndex, 1);
+    return res.json({ message: "country delate" });
+  }
+});
 
-  //  la validacion de datos
+// actualizacion de un pais
+app.patch("/country/:id", (req, res) => {
+  const { id } = req.params;
   const valide = parcialCountry(req.body);
-  if (valide.error) {
+  const countryIndex = countrys.findIndex(
+    (country) => country._id === parseInt(id)
+  );
+  if (countryIndex === -1) {
     res.status(404).json({ error: JSON.parse(valide.error.message) });
   }
 
-  const database = await getMongodb();
+  const upadteCountry = {
+    ...countrys[countryIndex],
+    ...valide.data,
+  };
 
-  const collection = database.collection("america");
+  countrys[countryIndex] = upadteCountry;
 
-  const countryId = parseInt(id);
-
-  const findCountryid = await collection.findOne({ _id: countryId });
-
-  const updateCountry = await collection.updateOne(
-    { _id: countryId },
-    { $set: valide.data }
-  );
-  if (updateCountry.modifiedCount === 0) {
-    return res.status(400).json({ message: "No se pudo actualizar el país." });
-  }
-
-  const updatedCountry = await collection.findOne({ _id: countryId });
-  res.status(201).json(updatedCountry);
-});
-
-// para borrar un pais
-app.delete("/country/:id", async (req, res) => {
-  const { id } = req.params;
-  const database = await getMongodb();
-
-  const collection = database.collection("america");
-
-  const countrys = await collection.find().toArray();
-
-  const country = countrys.find((country) => country._id === parseInt(id));
-
-  if (country) {
-    const result = await collection.deleteOne(country);
-    res.status(200).json({ message: "pais borrado" });
-  } else {
-    res.status(404).json({ message: "no encontrado" });
-  }
+  return res.json(upadteCountry);
 });
 
 // en caso que la peticion no se encuentre
